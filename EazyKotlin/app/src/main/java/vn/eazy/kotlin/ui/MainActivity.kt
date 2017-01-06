@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import vn.eazy.kotlin.R
+import vn.eazy.kotlin.model.Person
 import vn.eazy.kotlin.model.User
 
 
@@ -20,6 +21,10 @@ class MainActivity : AppCompatActivity() {
     private var users: List<User>? = null
     private var rootView: View? = null
     private var notificationManager: NotificationManager? = null
+    private val person : Person? by lazy{ Person("Harry")}
+
+    private val lazyUser : User? by lazy { User("Harry Lazy","longzma13@gmail.com") }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,6 +46,12 @@ class MainActivity : AppCompatActivity() {
         when (user?.name) {
             "Harry" -> Toast.makeText(applicationContext, "This is Harry", Toast.LENGTH_SHORT).show()
         }
+
+        //filter
+        val filterUser = users?.filter { it.name.length > 5 }
+
+        //auto casting
+        logUser(user!!)
 
         //Extension Function
         tvInput.setText("harryle.fit@gmail.com")
@@ -66,8 +77,14 @@ class MainActivity : AppCompatActivity() {
         notificationManager?.notify(1, notfication(applicationContext, {
             setContentTitle("Test Inline function")
             setContentText("Hello Kotlin")
-            setSmallIcon(R.drawable.notification_action_background)
+            setSmallIcon(R.mipmap.ic_launcher)
         }))
+    }
+
+    fun logUser(obj: Any) {
+        if (obj is User) {
+            Log.i("Kotlin", "Auto Casting Name:" + obj.name)
+        }
     }
 
     fun EditText.isEmail(): Boolean {
